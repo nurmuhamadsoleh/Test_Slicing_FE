@@ -1,11 +1,40 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../components/Card";
+import CardHijau from "../../components/CardHijau";
+import CardMerah from "../../components/CardMerah";
 import Search from "../../components/Search";
 import axios from "axios";
 import { tokenHeader, url } from "../../helpers/config";
 
 const Homepage = () => {
   let [row, setRow] = useState([]);
+  let [query, setQuery] = useState("");
+  let [keyword, setkeyword] = useState("");
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setkeyword(query);
+    // if (keyword == null || keyword == undefined) {
+    //   return setTimeout(() => {
+    //     getData();
+    //   }, 1000);
+    // }
+  };
+  const limitProduct = row.filter((product) => {
+    return product.PART_NAME.includes("Paket ");
+  });
+  const StaticsLimit = [
+    "Paket 9",
+    "Paket 8",
+    "Paket 7",
+    "Paket 6",
+    "Paket 5",
+    "Paket 4",
+    "Paket 3",
+    "Paket 2",
+    "Paket 1",
+  ];
+  const Excludelimit = row.filter((item) => {
+    return !StaticsLimit.some((t) => item.PART_NAME.includes(t));
+  });
   const hdr = tokenHeader();
   const getData = async () => {
     var data = JSON.stringify({
@@ -19,7 +48,7 @@ const Homepage = () => {
           "C6FD8A1301AF8637A0B4166A491C0E91D4B823B0AA6EA09A32C284369EAEC52C",
         FILTER_COLOUMN: "",
         FILTER_FIELD: "",
-        FILTER_VALUE: "",
+        FILTER_VALUE: keyword,
         PAGE_NO: "1",
         PAGE_ROW: "10000",
         SORT_ORDER_BY: "PART_ID",
@@ -41,37 +70,30 @@ const Homepage = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire("Sorry", "Data Gagal Di Tampilkan", "error");
       });
   };
   useEffect(() => {
     getData();
-  }, []);
-  //   axios(config)
-  //     .then(function (response) {
-  //       //   console.log("response data", response.data.rs.DATA);
-  //       var result = response.data.rs.DATA;
-  //       setRow(result);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  console.log("data row", row);
+  }, [keyword]);
   return (
     <div>
-      <Search />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 ml-2 mr-2">
-        {row.map((item, index) => {
+      <Search handle={handleSearch} setquery={setQuery} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mr-2 ml-2">
+        {Excludelimit.map((item, index) => {
           return (
             <div key={index}>
-              <Card part_name={item.PART_NAME} price={item.UNIT_PRICE_1} />
+              <CardMerah part_name={item.PART_NAME} price={item.UNIT_PRICE_1} />
             </div>
           );
         })}
-        {/* <Card />
-        <Card />
-        <Card /> */}
+        {limitProduct.map((item, index) => {
+          return (
+            <div key={index}>
+              <CardHijau part_name={item.PART_NAME} price={item.UNIT_PRICE_1} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

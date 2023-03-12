@@ -12,17 +12,17 @@ const Top = () => {
   const { pathname } = useLocation();
   let iconStyles = { color: "white", fontSize: "1.5em" };
   return (
-    <div className="bg-[#C0226D] rounded-b-2xl text-[#FFF]">
+    <div className="bg-[#C0226D] rounded-b-2xl text-[#FFF] text-[8px] sm:text-[16px]">
       <ul className="flex justify-around items-center h-16 gap-3">
         <li>
           <Link to="/" className={`${pathname == "/" ? "font-bold" : ""}`}>
-            <img src={Logo} alt="Profile" width="80px" className="mt-3" />
+            <img src={Logo} alt="Profile" className="mt-3 w-[80px]" />
           </Link>
         </li>
         <li>
           <Link to="/" className={`${pathname == "/" ? "font-bold" : ""}`}>
             <div className="flex items-center flex-col">
-              <AiOutlineHome size={30} />
+              <AiOutlineHome size={20} />
               <span>Beranda</span>
             </div>
           </Link>
@@ -69,7 +69,7 @@ const Top = () => {
         </li>
         <li>
           <Link to="/" className={`${pathname == "/" ? "font-bold" : ""}`}>
-            <img src={Profile} alt="Profile" width="40px" />
+            <img src={Profile} alt="Profile" className="mt-3 w-[40px]" />
           </Link>
         </li>
       </ul>
